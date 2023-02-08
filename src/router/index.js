@@ -1,21 +1,47 @@
-import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
-import login from "../view/login.vue";
-import App from "../App.vue";
+import {createRouter, createWebHistory} from 'vue-router'
+
 const routes = [
     // ...
     {
-        path:"/login",
-        name:"Login",
-        component: login
+        path: '/:pathMatch(.*)*',
+        name: "NotFound",
+        component: () => import("@/view/404.vue"),
+        meta: {
+            notfound: true
+        }
     },
     {
-        path:"/1",
-        name:"App",
-        component: App
+        path: '/',
+        name: 'Index',
+        component: () => import('@/view/index.vue'),
+        meta: {
+            title: '随缘IM'
+        }
     },
+    {
+        path: "/login",
+        name: "Login",
+        component: () => import('@/view/login.vue'),
+        meta: {
+            title: "登录",
+            needLogin: true
+        }
+    },
+
 ]
 
-export default createRouter({
+
+const router = createRouter({
     history: createWebHistory(),
     routes,
-})
+});
+
+// 全局守卫
+router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+        window.document.title = to.meta.title
+    }
+
+    next()
+});
+export default router

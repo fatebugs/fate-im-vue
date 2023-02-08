@@ -81,7 +81,6 @@ export default {
   margin: 0px 0px 15px 0px;
 }
 body{
-  background-image: url("../assets/background.jpg") ;
   background-size:100%;
 }
 </style>

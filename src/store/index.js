@@ -1,6 +1,6 @@
 import {createStore} from 'vuex';
-import person from "./user/person.js";
-import count from "./user/count.js";
+import person from "@/store/user/person";
+import count from "@/store/user/count";
 
 //创建store实例
 export default createStore({

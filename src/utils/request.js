@@ -2,7 +2,7 @@
 // 导入axios
 import axios from 'axios'
 // 使用element-ui Message做消息提醒
-import { Message} from 'element3';
+import { Message} from 'element-plus';
 
 const urlConfig={
     baseUrl: "http://localhost:13300/"
