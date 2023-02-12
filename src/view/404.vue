@@ -615,7 +615,7 @@
         float:left;
         width:160px;
         height:151px;
-        background:url('@/assets/error.png') 0 0 no-repeat
+        background:url('@/assets/image/error.png') 0 0 no-repeat
     }
     .module-error .info {
         margin-left:182px;

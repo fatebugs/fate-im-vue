@@ -1,6 +1,7 @@
 import {createStore} from 'vuex';
 import person from "@/store/user/person";
 import count from "@/store/user/count";
+import index from "@/store/index/index.js";
 
 //创建store实例
 export default createStore({
@@ -12,7 +13,8 @@ export default createStore({
     actions: {},  //可以发送异步请求
     modules: {
         personAbout:person,
-        countAbout:count
+        countAbout:count,
+        indexAbout:index
     },  //拆分存储空间模块化
     // plugins: {},  //拓展vuex功能
 })

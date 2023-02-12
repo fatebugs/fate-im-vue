@@ -1,5 +1,5 @@
 // 引入封装好的 request.js
-import request from '@/request'
+import request from '@/api/request.js'
 
 export function getList(query) {
     return request({
