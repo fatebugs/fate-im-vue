@@ -4,6 +4,8 @@ import axios from 'axios'
 // 使用element-ui Message做消息提醒
 import {ElMessage} from 'element-plus';
 
+import { MessagePlugin } from 'tdesign-vue-next';
+
 const urlConfig = {
     baseUrl: "http://localhost:13300"
 }
@@ -86,12 +88,12 @@ service.interceptors.response.use(response => {
     } else {
         // 超时处理
         if (JSON.stringify(error).includes('timeout')) {
-            ElMessage.error('服务器响应超时，请刷新当前页')
+            MessagePlugin.error('服务器响应超时，请刷新当前页')
         }
         error.message = '连接服务器失败'
     }
 
-    ElMessage.error(error.message)
+    MessagePlugin.error(error.message)
     /***** 处理结束 *****/
     //如果不需要错误处理，以上的处理过程都可省略
     return Promise.resolve(error.response)

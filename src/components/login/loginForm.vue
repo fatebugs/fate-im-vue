@@ -11,7 +11,8 @@
                   <input id="passwd" v-model="user.userPassword" placeholder="密码" type="password"/>
               </p>
               <input class="btn" style="margin-right: 20px;" type="button" value="登录" @click="userLogin"/>
-              <a href="#">忘记密码了？</a>
+
+              <router-link to="/">忘记密码了？</router-link>
         </span>
     </div>
 </template>
@@ -20,6 +21,7 @@
 
 import {login} from "@/api/user/login.js";
 import AESUtils from "@/utils/AESUtils.js";
+import {useRouter} from "vue-router";
 
 
 let user = reactive({
@@ -29,16 +31,25 @@ let user = reactive({
 
 let result = reactive({})
 
+const router = useRouter()
+
 async function userLogin() {
     let userParam = JSON.parse(JSON.stringify(user));
     userParam.userPassword = AESUtils.encrypt(userParam.userPassword)
 
-    await login(userParam).then((res) => {
+    await login(userParam).then(
+        (res) => {
             result = res.data;
-            sessionStorage.setItem("session_token", res.data.data.token)
+            sessionStorage.setItem("session_token", result.data.token)
+            sessionStorage.setItem("userInfoAvatar", result.data.user.userInfoAvatar)
+            if (result.code===200){
+                router.push({
+                    name:"HomePage"
+                });
+            }
+
         }
     );
-    console.log(sessionStorage.getItem("session_token"))
 }
 
 

@@ -7,7 +7,9 @@ const routes = [
         name: "NotFound",
         component: () => import("@/view/404.vue"),
         meta: {
-            notfound: true
+            notfound: true,
+            title: '啊哦，404了呢'
+
         }
     },
     {
@@ -21,7 +23,10 @@ const routes = [
     {
         path: "/home",
         name: "HomePage",
-        component:()=> import("@/view/HomePage.vue")
+        component:()=> import("@/view/HomePage.vue"),
+        meta: {
+            title: '随缘IM'
+        }
     },
     {
         path: "/login",
