@@ -8,3 +8,10 @@ export function login(query) {
         data: query,
     })
 }
+export function register(query) {
+    return request({
+        url: '/user-service/user/register',
+        method: 'post',
+        data: query,
+    })
+}

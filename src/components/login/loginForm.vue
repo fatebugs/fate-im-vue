@@ -13,6 +13,7 @@
               <input class="btn" style="margin-right: 20px;" type="button" value="登录" @click="userLogin"/>
 
               <router-link to="/">忘记密码了？</router-link>
+              <router-link to="/register">还没有账号？</router-link>
         </span>
     </div>
 </template>
@@ -22,6 +23,7 @@
 import {login} from "@/api/user/login.js";
 import AESUtils from "@/utils/AESUtils.js";
 import {useRouter} from "vue-router";
+import { MessagePlugin } from 'tdesign-vue-next';
 
 
 let user = reactive({
@@ -40,12 +42,14 @@ async function userLogin() {
     await login(userParam).then(
         (res) => {
             result = res.data;
-            sessionStorage.setItem("session_token", result.data.token)
-            sessionStorage.setItem("userInfoAvatar", result.data.user.userInfoAvatar)
             if (result.code===200){
+                localStorage.setItem("session_token", result.data.token)
+                localStorage.setItem("userInfoAvatar", result.data.user.userInfoAvatar)
                 router.push({
                     name:"HomePage"
                 });
+            }else {
+                MessagePlugin.error(result.msg)
             }
 
         }

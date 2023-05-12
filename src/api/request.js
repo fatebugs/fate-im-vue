@@ -4,10 +4,12 @@ import axios from 'axios'
 // 使用element-ui Message做消息提醒
 import {ElMessage} from 'element-plus';
 
+import {APIUrl} from "@/api/apiConfig.js";
+
 import { MessagePlugin } from 'tdesign-vue-next';
 
 const urlConfig = {
-    baseUrl: "http://localhost:13300"
+    baseUrl: APIUrl
 }
 
 //1. 创建新的axios实例，
@@ -25,7 +27,7 @@ service.interceptors.request.use(config => {
         'Content-Type': 'application/json;charset=utf-8', //配置请求头
     }
     //注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
-    const token = sessionStorage.getItem('session_token');//这里取token之前，你肯定需要先拿到token,存一下
+    const token = localStorage.getItem('session_token');//这里取token之前，你肯定需要先拿到token,存一下
     if (token) {
         config.headers.session_token = token; //如果要求携带在请求头中
     }

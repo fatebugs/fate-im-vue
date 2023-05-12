@@ -7,14 +7,15 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ContactList: typeof import('./components/home/contactList.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
-    Form: typeof import('./components/login/form.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     HomeRight: typeof import('./components/home/HomeRight.vue')['default']
     IEpPromotion: typeof import('~icons/ep/promotion')['default']
     IndexBody: typeof import('./components/index/indexBody.vue')['default']
     IndexHeader: typeof import('./components/index/indexHeader.vue')['default']
     LoginForm: typeof import('./components/login/loginForm.vue')['default']
+    MenuRight: typeof import('./components/home/menuRight.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TAside: typeof import('tdesign-vue-next')['Aside']
@@ -22,20 +23,16 @@ declare module '@vue/runtime-core' {
     TBadge: typeof import('tdesign-vue-next')['Badge']
     TButton: typeof import('tdesign-vue-next')['Button']
     TCol: typeof import('tdesign-vue-next')['Col']
-    TComment: typeof import('tdesign-vue-next')['Comment']
     TContent: typeof import('tdesign-vue-next')['Content']
-    TFooter: typeof import('tdesign-vue-next')['Footer']
-    THeader: typeof import('tdesign-vue-next')['Header']
     THeadMenu: typeof import('tdesign-vue-next')['HeadMenu']
     TIcon: typeof import('tdesign-vue-next')['Icon']
     TLayout: typeof import('tdesign-vue-next')['Layout']
-    TLink: typeof import('tdesign-vue-next')['Link']
     TList: typeof import('tdesign-vue-next')['List']
     TListItem: typeof import('tdesign-vue-next')['ListItem']
     TListItemMeta: typeof import('tdesign-vue-next')['ListItemMeta']
     TMenu: typeof import('tdesign-vue-next')['Menu']
+    TMenuGroup: typeof import('tdesign-vue-next')['MenuGroup']
     TMenuItem: typeof import('tdesign-vue-next')['MenuItem']
     TRow: typeof import('tdesign-vue-next')['Row']
-    TSpace: typeof import('tdesign-vue-next')['Space']
   }
 }

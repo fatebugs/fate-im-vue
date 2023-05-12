@@ -56,7 +56,7 @@ function goIndex() {
 }
 
 onMounted(() => {
-    userInfo.userInfoAvatar = window.sessionStorage.getItem("userInfoAvatar");
+    userInfo.userInfoAvatar = window.localStorage.getItem("userInfoAvatar");
 })
 
 </script>

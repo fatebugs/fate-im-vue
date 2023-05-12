@@ -18,17 +18,9 @@ import 'element-plus/dist/index.css'
 //import {Comment} from 'tdesign-vue-next';
 import 'tdesign-vue-next/es/style/index.css';
 
+let app = createApp(App);
 
-
-createApp(App)
-    .use(router)
+app.use(router)
     // .use(ElementPlus)
     .use(store)
-    /*.use(new VueSocketIO({
-        debug: true,// 生产环境关闭，打开可在控制台查看socket连接和事件监听的信息
-        options: {
-            autoConnect: false //创建时是否自动连接，默认关闭，使用时用open开启链接
-        },
-        connection: 'http://127.0.0.1:9527' //链接地址
-    }))*/
     .mount('#app')

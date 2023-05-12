@@ -17,7 +17,8 @@ const routes = [
         name: 'Index',
         component: () => import('@/view/index.vue'),
         meta: {
-            title: '随缘IM'
+            title: '随缘IM',
+            needLogin: false
         }
     },
     {
@@ -25,7 +26,8 @@ const routes = [
         name: "HomePage",
         component:()=> import("@/view/HomePage.vue"),
         meta: {
-            title: '随缘IM'
+            title: '随缘IM',
+            needLogin: true
         }
     },
     {
@@ -34,9 +36,18 @@ const routes = [
         component: () => import('@/view/login.vue'),
         meta: {
             title: "登录",
-            needLogin: true
+            needLogin: false
         }
     },
+    {
+        path: "/register",
+        name: "Register",
+        component: () => import('@/view/register.vue'),
+        meta: {
+            title: "注册",
+            needLogin: false
+        }
+    }
 
 ]
 
@@ -48,8 +59,21 @@ const router = createRouter({
 
 // 全局守卫
 router.beforeEach((to, from, next) => {
+    //修改标题
     if (to.meta.title) {
         window.document.title = to.meta.title
+    }
+    //判断是否需要登录
+    if (to.meta.needLogin) {
+        if (localStorage.getItem("session_token")) {
+            next()
+            return
+        } else {
+            next({
+                name: "Login"
+            })
+            return;
+        }
     }
 
     next()
