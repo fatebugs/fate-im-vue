@@ -75,6 +75,15 @@ router.beforeEach((to, from, next) => {
             return;
         }
     }
+    //如果当前在登录页，判断是否已经登录，如果已经登录，跳转到首页
+    if (to.name === "Login") {
+        if (localStorage.getItem("session_token")) {
+            next({
+                name: "HomePage"
+            })
+            return
+        }
+    }
 
     next()
 });

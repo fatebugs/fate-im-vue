@@ -3,23 +3,23 @@
         <t-menu-group title="主导航">
             <t-menu-item value="item1">
                 <template #icon>
-                    <t-icon name="app" />
+                    <t-icon name="user" />
                 </template>
                 私信
             </t-menu-item>
         </t-menu-group>
-        <t-menu-group title="组件">
+        <t-menu-group title="群聊">
             <t-menu-item value="2-4">
                 <template #icon>
-                    <t-icon name="check" />
+                    <t-icon name="usergroup" />
                 </template>
-                结果页
+                群聊
             </t-menu-item>
         </t-menu-group>
         <t-menu-group title="更多">
             <t-menu-item value="item3">
                 <template #icon>
-                    <t-icon name="user" />
+                    <t-icon name="setting" />
                 </template>
                 个人资料
             </t-menu-item>

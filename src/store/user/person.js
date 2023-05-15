@@ -30,7 +30,6 @@ export default {
 	},
 	state:{
 		personList:[
-			{id:'001',name:'张三'}
 		]
 	},
 	getters:{

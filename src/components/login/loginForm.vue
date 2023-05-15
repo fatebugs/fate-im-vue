@@ -24,6 +24,8 @@ import {login} from "@/api/user/login.js";
 import AESUtils from "@/utils/AESUtils.js";
 import {useRouter} from "vue-router";
 import { MessagePlugin } from 'tdesign-vue-next';
+import {useStore} from "vuex";
+
 
 
 let user = reactive({
@@ -34,6 +36,7 @@ let user = reactive({
 let result = reactive({})
 
 const router = useRouter()
+const store = useStore()
 
 async function userLogin() {
     let userParam = JSON.parse(JSON.stringify(user));
@@ -45,6 +48,7 @@ async function userLogin() {
             if (result.code===200){
                 localStorage.setItem("session_token", result.data.token)
                 localStorage.setItem("userInfoAvatar", result.data.user.userInfoAvatar)
+                store.commit('userAbout/setTokenInfo', result.data)
                 router.push({
                     name:"HomePage"
                 });
