@@ -11,7 +11,7 @@
             <t-layout>
                 <t-content style="border-top: 1px solid var(--component-border);">
                     <div style="width: 68vw;height: 80vh;background-color: #FFF1C3">
-
+<!--                        {{ msg }}-->
                     </div>
 
                 </t-content>
