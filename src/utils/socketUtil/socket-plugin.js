@@ -2,6 +2,7 @@ import {socketUrl} from "@/api/apiConfig.js";
 import {Message} from "@/model/IMResponse.js"
 
 
+
 let ws = null; //建立的连接
 let lockReconnect = false;//是否真正建立连接
 let timeout = 15 * 1000;//30秒一次心跳
@@ -60,11 +61,14 @@ export const onError = () => {
     ws.close()
     ws = null
     lockReconnect = false
+    localStorage.removeItem("session_token")
 }
 //连接关闭
 export const onClose = () => {
     console.log('连接关闭')
     closeWs()
+    //修改连接状态
+    this.$store.commit('messageAbout/changeLinkFlag', false)
 }
 //断开关闭
 export const closeWs = () => {

@@ -8,3 +8,9 @@ export function getList(query) {
         params: query,
     })
 }
+export function getUserChatList() {
+    return request({
+        url: '/im-service/userChat/getChatList',
+        method: 'get',
+    })
+}

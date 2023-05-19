@@ -12,14 +12,14 @@
             <template #operations>
                 <t-menu-item value="item1">API</t-menu-item>
                 <div class="t-demo-menu" style="margin-right: 300px">
-                    <t-button v-if="!userInfo.userInfoAvatar" shape="square" variant="text" @click="openLoginPage">
+                    <t-button v-if="!userInfo.user" shape="square" variant="text" @click="openLoginPage">
                         <template #icon>
                             <t-icon name="user" size="20px"/>
                         </template>
                     </t-button>
-                    <t-button v-if="userInfo.userInfoAvatar" shape="circle" variant="text">
+                    <t-button v-if="userInfo.user" shape="circle" variant="text">
                         <template #icon>
-                            <t-avatar :image="userInfo.userInfoAvatar" alt="用户头像" hideOnLoadFailed/>
+                            <t-avatar :image="userInfo.user.userInfoAvatar" alt="用户头像" hideOnLoadFailed/>
                         </template>
                     </t-button>
 
@@ -39,8 +39,8 @@
 <script setup>
 import router from "@/router/index.js";
 
-let userInfo = reactive({
-    "userInfoAvatar": 'null'
+let userInfo = computed(() => {
+    return useStore().state.userAbout.tokenInfo
 })
 
 function openLoginPage() {
@@ -54,29 +54,29 @@ function goIndex() {
         name: "Index",
     })
 }
-
 onMounted(() => {
-    userInfo.userInfoAvatar = window.localStorage.getItem("userInfoAvatar");
+    //挂载时获取基础信息
+
 })
 
 </script>
 <style lang="less" scoped>
 .t-menu__operations {
-    .t-button {
-        margin-left: 8px;
-    }
+  .t-button {
+    margin-left: 8px;
+  }
 }
 
 .t-demo-menu--dark {
-    .t-button {
-        color: #fff;
+  .t-button {
+    color: #fff;
 
-        &:hover {
-            background-color: #4b4b4b;
-            border-color: transparent;
-            --ripple-color: #383838;
-        }
+    &:hover {
+      background-color: #4b4b4b;
+      border-color: transparent;
+      --ripple-color: #383838;
     }
+  }
 }
 </style>
 

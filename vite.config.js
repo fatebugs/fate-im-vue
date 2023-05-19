@@ -25,7 +25,7 @@ export default defineConfig({
         vue(),
         AutoImport({
             // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
-            imports: ['vue'],
+            imports: ['vue','vue-router','vuex'],
 
             resolvers: [
                 TDesignResolver({
@@ -53,6 +53,9 @@ export default defineConfig({
                 IconsResolver({
                     enabledCollections: ['ep'],
                 }),
+                //自动注册vue-core-video-player
+
+
             ],
             dts: path.resolve(pathSrc, 'components.d.ts'),
         }),

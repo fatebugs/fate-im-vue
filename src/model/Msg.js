@@ -10,6 +10,7 @@ export class Msg{
     userUuid;//用户uuid
     nickName;//用户昵称
     avatar;//用户头像
+    fromType;//消息来源类型
 
     /**
      *
@@ -17,12 +18,13 @@ export class Msg{
      */
     constructor(data) {
         this.id = data.id;
-        // this.sessionId = data.sessionId;
+        this.sessionId = data.sessionId;
         this.content = data.content;
         this.contentType = data.contentType;
         this.msgTime = data.sendTime;
         this.userUuid = data.fromUser?.userUuid;
         this.nickName = data.fromUser?.nickName;
         this.avatar = data.fromUser?.avatar;
+        this.fromType = data.fromType;
     }
 }

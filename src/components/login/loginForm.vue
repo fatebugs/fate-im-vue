@@ -47,7 +47,6 @@ async function userLogin() {
             result = res.data;
             if (result.code===200){
                 localStorage.setItem("session_token", result.data.token)
-                localStorage.setItem("userInfoAvatar", result.data.user.userInfoAvatar)
                 store.commit('userAbout/setTokenInfo', result.data)
                 router.push({
                     name:"HomePage"

@@ -23,7 +23,10 @@ declare module '@vue/runtime-core' {
     TBadge: typeof import('tdesign-vue-next')['Badge']
     TButton: typeof import('tdesign-vue-next')['Button']
     TCol: typeof import('tdesign-vue-next')['Col']
+    TComment: typeof import('tdesign-vue-next')['Comment']
     TContent: typeof import('tdesign-vue-next')['Content']
+    TFooter: typeof import('tdesign-vue-next')['Footer']
+    THeader: typeof import('tdesign-vue-next')['Header']
     THeadMenu: typeof import('tdesign-vue-next')['HeadMenu']
     TIcon: typeof import('tdesign-vue-next')['Icon']
     TLayout: typeof import('tdesign-vue-next')['Layout']
@@ -34,5 +37,7 @@ declare module '@vue/runtime-core' {
     TMenuGroup: typeof import('tdesign-vue-next')['MenuGroup']
     TMenuItem: typeof import('tdesign-vue-next')['MenuItem']
     TRow: typeof import('tdesign-vue-next')['Row']
+    TSpace: typeof import('tdesign-vue-next')['Space']
+    TTextarea: typeof import('tdesign-vue-next')['Textarea']
   }
 }

@@ -1,116 +1,41 @@
 <template>
 
-        <t-list :split="true" style="max-height: 92vh;width: 20vw" @scroll="scrollHandler">
-            <t-button v-for="(message,index) of messageList" :key="index" block style="height: 90px;"
-                      theme="default" variant="outline">
-                <t-list-item style="width: 18vw">
-                    <t-list-item-meta :image="message.avatar" :title="message.userName">
-                        <template #description>
-                            <p>{{ message.lastMsg }}</p>
-                        </template>
-
-                    </t-list-item-meta>
-                    <template #action>
-                        <span>{{ message.time }}</span>
+    <t-list :split="true" style="max-height: 92vh;" @scroll="scrollHandler">
+        <t-button v-for="(chat,index) of chatList" :key="index" block style="height: 90px;"
+                  theme="default" variant="outline"
+        @click="checkUserChat(chat)"
+        >
+            <t-list-item style="width: 18vw;">
+                <t-list-item-meta :image="chat.friendAvatar" :title="chat.friendName">
+                    <template #description>
+                        <p>{{chat.id}}{{ chat.lastMessage }}</p>
                     </template>
-                </t-list-item>
-            </t-button>
-        </t-list>
+
+                </t-list-item-meta>
+                <template #action>
+                    <span>{{ dayjs(chat.lastMessageTime).format('hh:mm')}}</span>
+                </template>
+            </t-list-item>
+        </t-button>
+    </t-list>
 
 </template>
 
 <script setup>
-let messageList = reactive(
-    [
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-        {
-            "id": '1',
-            "userName": '随缘',
-            "avatar": 'https://klns.oss-cn-beijing.aliyuncs.com/wgmrtp.png',
-            "lastMsg": 'Hello Bug',
-            "time": '17:07:27'
-        },
-    ]
-)
+import dayjs from "dayjs";
+
+let chatList = computed(() => {
+    return useStore().state.messageAbout.userMsgList
+})
+
+//映射vuex的方法
+const store = useStore();
+const checkUserChat = (chat) => {
+    store.dispatch('messageAbout/checkUserChat',chat)
+}
 
 
-let imageUrl = ref("https://tdesign.gtimg.com/site/avatar.jpg")
+
 
 //监听列表滚动事件
 const scrollHandler = (e) => console.log(e);

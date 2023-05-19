@@ -51,7 +51,7 @@ function openLoginPage() {
 
 onMounted(() => {
     let token = window.sessionStorage.getItem("session_token");
-    loginFlag.flag = !!token;
+    loginFlag.flag = !token;
 })
 
 const UserDetails = {

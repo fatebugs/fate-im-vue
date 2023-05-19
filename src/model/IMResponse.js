@@ -46,6 +46,12 @@ export class Message {
      */
     fromUser=new FromUser();
 
+    /**
+     * 会话id
+     * @type {string}
+     */
+    sessionId;
+
     constructor(data){
         this.id = data?.msgId;
         this.from = data?.from;
@@ -55,5 +61,6 @@ export class Message {
         this.contentType = data?.contentType;
         this.sendTime = data?.sendTime;
         this.fromUser = data?.fromUser;
+        this.sessionId = data?.sessionId;
     }
 }
