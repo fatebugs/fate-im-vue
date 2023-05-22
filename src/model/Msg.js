@@ -1,5 +1,6 @@
 //消息
 import Message from "@/store/msg/message.js";
+import dayjs from "dayjs";
 
 export class Msg{
     id;
@@ -21,7 +22,7 @@ export class Msg{
         this.sessionId = data.sessionId;
         this.content = data.content;
         this.contentType = data.contentType;
-        this.msgTime = data.sendTime;
+        this.msgTime = dayjs(data.sendTime).format('YYYY-MM-DD HH:mm:ss')
         this.userUuid = data.fromUser?.userUuid;
         this.nickName = data.fromUser?.nickName;
         this.avatar = data.fromUser?.avatar;

@@ -16,7 +16,7 @@ export default {//加密
         keyStr = keyStr ? keyStr : 'fatebugsfatebugs';
         var key = CryptoJS.enc.Utf8.parse(keyStr);//Latin1 w8m31+Yy/Nw6thPsMpO5fg==
         var decrypt = CryptoJS.AES.decrypt(word, key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
-        return CryptoJS.enc.Utf8.stringify(decrypt).toString();
+        return decrypt.toString();
     }
 
 }

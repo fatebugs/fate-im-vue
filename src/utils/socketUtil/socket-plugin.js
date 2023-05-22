@@ -1,5 +1,7 @@
 import {socketUrl} from "@/api/apiConfig.js";
 import {Message} from "@/model/IMResponse.js"
+import router from "@/router/index.js";
+import store from "@/store/index.js";
 
 
 
@@ -11,6 +13,7 @@ let serverTimeoutObj = null;//心跳倒计时
 let timeoutnum = null;//断开 重连倒计时
 let global_callback = null; //监听服务端消息
 // uri: 长链接地址<br>// jwt: 前后端连接凭证， 按需添加<br>// callback: 服务端消息回调函数
+
 
 //初始化websocket
 export const createWebSocket = (callback) => {
@@ -68,7 +71,7 @@ export const onClose = () => {
     console.log('连接关闭')
     closeWs()
     //修改连接状态
-    this.$store.commit('messageAbout/changeLinkFlag', false)
+    store.commit('messageAbout/changeLinkFlag', false)
 }
 //断开关闭
 export const closeWs = () => {

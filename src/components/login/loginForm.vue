@@ -13,7 +13,7 @@
               <input class="btn" style="margin-right: 20px;" type="button" value="登录" @click="userLogin"/>
 
               <router-link to="/">忘记密码了？</router-link>
-              <router-link to="/register">还没有账号？</router-link>
+              <input class="btn" style="margin-right: 20px;" type="button" value="没有账号注册" @click="upRlFlag"/>
         </span>
     </div>
 </template>
@@ -25,6 +25,7 @@ import AESUtils from "@/utils/AESUtils.js";
 import {useRouter} from "vue-router";
 import { MessagePlugin } from 'tdesign-vue-next';
 import {useStore} from "vuex";
+
 
 
 
@@ -48,6 +49,8 @@ async function userLogin() {
             if (result.code===200){
                 localStorage.setItem("session_token", result.data.token)
                 store.commit('userAbout/setTokenInfo', result.data)
+                store.dispatch('messageAbout/initAllMsgList')
+
                 router.push({
                     name:"HomePage"
                 });
@@ -57,6 +60,9 @@ async function userLogin() {
 
         }
     );
+}
+function upRlFlag() {
+    store.commit('userAbout/setRlFlag',false)
 }
 
 

@@ -12,14 +12,14 @@ export class TokenInfo {
     roles=[];//角色列表
 
     constructor(data) {
-        this.token = data.token;
-        this.user = new UserInfo(data.user)
-        this.userUuid = data.userUuid;
-        this.userName = data.userName;
-        this.loginTime = data.loginTime;
-        this.expireTime = data.expireTime;
-        this.ipaddr = data.ipaddr;
-        this.permissions = data.permissions;
-        this.roles = data.roles;
+        this.token = data?.token;
+        this.user = new UserInfo(data?.user)
+        this.userUuid = data?.userUuid;
+        this.userName = data?.userName;
+        this.loginTime = data?.loginTime;
+        this.expireTime = data?.expireTime;
+        this.ipaddr = data?.ipaddr;
+        this.permissions = data?.permissions;
+        this.roles = data?.roles;
     }
 }

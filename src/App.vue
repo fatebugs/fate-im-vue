@@ -3,8 +3,6 @@
 </template>
 
 <script setup>
-
-import {useRoute} from "vue-router";
 import {computed} from "vue";
 import {createWebSocket, onClose} from "@/utils/socketUtil/socket-plugin.js";
 
@@ -19,9 +17,9 @@ onMounted(() => {
     //修改连接状态
     store.commit('messageAbout/changeLinkFlag', false)
 
-    if (localStorage.getItem("session_token")) {
+   /* if (localStorage.getItem("session_token")) {
         store.dispatch('messageAbout/iniWebSocket')
-    }
+    }*/
 })
 
 onBeforeUnmount(() => {

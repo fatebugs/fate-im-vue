@@ -14,7 +14,7 @@
                             </div>
                             <div class="oper">
                                 <p><a href="javascript:history.go(-1);">返回上一级页面&gt;</a></p>
-                                <p><a href="#">回到网站首页&gt;</a></p>
+                                <p><router-link to="/">回到网站首页&gt;</router-link></p>
                             </div>
                         </div>
                     </div>

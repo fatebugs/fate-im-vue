@@ -26,3 +26,5 @@ app.use(router)
     // .use(ElementPlus)
     .use(store)
     .mount('#app')
+
+window._app_= app;

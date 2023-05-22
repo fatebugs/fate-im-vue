@@ -7,6 +7,8 @@ import {ElMessage} from 'element-plus';
 import {APIUrl} from "@/api/apiConfig.js";
 
 import { MessagePlugin } from 'tdesign-vue-next';
+import store from "@/store/index.js";
+import {TokenInfo} from "@/model/TokenInfo.js";
 
 const urlConfig = {
     baseUrl: APIUrl
@@ -15,9 +17,9 @@ const urlConfig = {
 //1. 创建新的axios实例，
 const service = axios.create({
     // 公共接口
-    baseURL: urlConfig.baseUrl + '/api',
-    // 超时时间 单位是ms，这里设置了3s的超时时间
-    timeout: 3 * 1000
+    baseURL: urlConfig.baseUrl,
+    // 超时时间 单位是ms，这里设置了10s的超时时间
+    timeout: 20 * 1000
 })
 // 2.请求拦截器
 service.interceptors.request.use(config => {
@@ -41,12 +43,16 @@ service.interceptors.response.use(response => {
     //接收到响应数据并成功后的一些共有的处理，关闭loading等
     const res = response.data;
     if (res.code === 200) {
-
-
         return response
+    } else if (res.code === 1008) {
+        MessagePlugin.error(res.msg)
+        localStorage.removeItem('session_token')
+        store.commit('userAbout/setTokenInfo',new TokenInfo())
+        return null
     } else {
-        MessagePlugin.error(res.message)
-        return Promise.reject(response)
+        MessagePlugin.error(res.msg)
+        // return Promise.reject(response)
+        return null
     }
 }, error => {
     /***** 接收到异常响应的处理开始 *****/
@@ -65,7 +71,7 @@ service.interceptors.response.use(response => {
                 break;
             case 404:
                 error.message = '请求错误,未找到该资源'
-                window.location.href = "/NotFound"
+                // window.location.href = "/NotFound"
                 break;
             case 405:
                 error.message = '请求方法未允许'
@@ -105,7 +111,8 @@ service.interceptors.response.use(response => {
     MessagePlugin.error(error.message)
     /***** 处理结束 *****/
     //如果不需要错误处理，以上的处理过程都可省略
-    return Promise.resolve(error.response)
+    // Promise.resolve(error.response)
+    return null
 })
 //4.导出axios实例
 export default service

@@ -1,7 +1,15 @@
 <template>
-    <t-menu theme="dark" default-value="item2" style=" width: 9.6vw;" :collapsed="collapsed" height="550px" @change="changeHandler">
+    <t-menu theme="dark" default-value="item2"
+            style=" width: 9.6vw;"
+            :collapsed="collapsed" height="550px"
+            @change="changeHandler"
+    >
+
         <t-menu-group title="主导航">
-            <t-menu-item value="item1">
+            <t-menu-item value="item1"
+                         name="item1"
+            to="/home/userMsg"
+            >
                 <template #icon>
                     <t-icon name="user" />
                 </template>

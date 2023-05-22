@@ -10,14 +10,14 @@ export class UserInfo{
     userInfoSignature;//用户个性签名
 
     constructor(data) {
-        this.userUuid = data.userUuid;
-        this.userName = data.userName;
-        this.userEmail = data.userEmail;
-        this.userPhoneNumber = data.userPhoneNumber;
-        this.userInfoNickname = data.userInfoNickname;
-        this.userInfoAvatar = data.userInfoAvatar;
-        this.userInfoGender = data.userInfoGender;
-        this.userInfoBirthday = data.userInfoBirthday;
-        this.userInfoSignature = data.userInfoSignature;
+        this.userUuid = data?.userUuid;
+        this.userName = data?.userName;
+        this.userEmail = data?.userEmail;
+        this.userPhoneNumber = data?.userPhoneNumber;
+        this.userInfoNickname = data?.userInfoNickname;
+        this.userInfoAvatar = data?.userInfoAvatar;
+        this.userInfoGender = data?.userInfoGender;
+        this.userInfoBirthday = data?.userInfoBirthday;
+        this.userInfoSignature = data?.userInfoSignature;
     }
 }

@@ -6,6 +6,7 @@ import count from "@/store/user/count";
 import index from "@/store/index/index.js";
 import message from "@/store/msg/message.js";
 import user from "@/store/user/user.js";
+import sendMsg from "@/store/msg/sendMsg.js";
 
 //创建store实例
 export default createStore({
@@ -18,7 +19,8 @@ export default createStore({
         countAbout: count,
         indexAbout: index,
         messageAbout: message,
-        userAbout:user
+        userAbout:user,
+        sendMsgAbout: sendMsg,
     },  //拆分存储空间模块化
     plugins: [
         //默认是存储在localStorage中

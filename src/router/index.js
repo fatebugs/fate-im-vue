@@ -24,11 +24,22 @@ const routes = [
     {
         path: "/home",
         name: "HomePage",
-        component:()=> import("@/view/HomePage.vue"),
+        component: () => import("@/view/HomePage.vue"),
         meta: {
             title: '随缘IM',
             needLogin: true
-        }
+        },
+        children: [
+            {
+                path: "userMsg",
+                name: "UserMsg",
+                component: () => import('@/components/home/userMsg.vue'),
+                meta: {
+                    title: "私信列表",
+                    needLogin: true
+                }
+            },
+        ]
     },
     {
         path: "/login",
@@ -40,14 +51,28 @@ const routes = [
         }
     },
     {
-        path: "/register",
-        name: "Register",
-        component: () => import('@/view/register.vue'),
+        path: "/demo",
+        name: "Demo",
+        component: () => import('@/view/demo.vue'),
         meta: {
-            title: "注册",
+            title: "demo",
             needLogin: false
-        }
+        }/*,
+        children: [
+            {
+                path: "userMsg",
+                name: "UserMsg",
+                component:
+                    () => import('@/components/home/userMsg.vue'),
+
+                meta: {
+                    title: "私信列表",
+                    needLogin: false
+                }
+            },
+        ]*/
     }
+
 
 ]
 
