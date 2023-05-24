@@ -57,6 +57,10 @@ const clickHandler = async (data) => {
           MessagePlugin.success("退出成功")
           localStorage.removeItem("session_token")
           store.commit('userAbout/setTokenInfo',new TokenInfo())
+          store.dispatch('messageAbout/initAllMsgList')
+          //关闭websocket
+          store.dispatch('messageAbout/closeWebSocket')
+
           router.push({
             name: "Index",
           })

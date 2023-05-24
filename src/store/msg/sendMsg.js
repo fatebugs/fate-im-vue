@@ -3,6 +3,8 @@ export default {
     namespaced:true,
     state:{
         formVisible:false,
+        videoVisible:false,
+        fileVisible:false,
     },
     actions:{
 
@@ -10,6 +12,12 @@ export default {
     mutations:{
         setFormVisible(state,formVisible){
             state.formVisible = formVisible;
+        },
+        setVideoVisible(state,videoVisible){
+            state.videoVisible = videoVisible;
+        },
+        setFileVisible(state,fileVisible){
+            state.fileVisible = fileVisible;
         },
     },
     getters:{

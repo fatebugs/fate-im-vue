@@ -7,8 +7,13 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ChannelList: typeof import('./components/home/channelList.vue')['default']
     ContactList: typeof import('./components/home/contactList.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElImage: typeof import('element-plus/es')['ElImage']
+    FileForm: typeof import('./components/home/dialogForm/fileForm.vue')['default']
+    GroupList: typeof import('./components/home/groupList.vue')['default']
+    GroupMsg: typeof import('./components/home/groupMsg.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     HomeRight: typeof import('./components/home/HomeRight.vue')['default']
     IEpPromotion: typeof import('~icons/ep/promotion')['default']
@@ -37,19 +42,24 @@ declare module '@vue/runtime-core' {
     THeader: typeof import('tdesign-vue-next')['Header']
     THeadMenu: typeof import('tdesign-vue-next')['HeadMenu']
     TIcon: typeof import('tdesign-vue-next')['Icon']
+    TImage: typeof import('tdesign-vue-next')['Image']
+    TImageViewer: typeof import('tdesign-vue-next')['ImageViewer']
     TInput: typeof import('tdesign-vue-next')['Input']
     TLayout: typeof import('tdesign-vue-next')['Layout']
+    TLink: typeof import('tdesign-vue-next')['Link']
     TList: typeof import('tdesign-vue-next')['List']
     TListItem: typeof import('tdesign-vue-next')['ListItem']
     TListItemMeta: typeof import('tdesign-vue-next')['ListItemMeta']
     TMenu: typeof import('tdesign-vue-next')['Menu']
     TMenuGroup: typeof import('tdesign-vue-next')['MenuGroup']
     TMenuItem: typeof import('tdesign-vue-next')['MenuItem']
+    TPopconfirm: typeof import('tdesign-vue-next')['Popconfirm']
     TPopup: typeof import('tdesign-vue-next')['Popup']
     TRow: typeof import('tdesign-vue-next')['Row']
     TSpace: typeof import('tdesign-vue-next')['Space']
     TTextarea: typeof import('tdesign-vue-next')['Textarea']
     TUpload: typeof import('tdesign-vue-next')['Upload']
     UserMsg: typeof import('./components/home/userMsg.vue')['default']
+    VideoForm: typeof import('./components/home/dialogForm/videoForm.vue')['default']
   }
 }

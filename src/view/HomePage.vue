@@ -23,6 +23,11 @@ import ContactList from "@/components/home/contactList.vue";
 
 let store = useStore();
 
+onMounted(() => {
+  store.dispatch('messageAbout/iniWebSocket')
+  // store.commit('sendMsgAbout/setFormVisible', false)
+})
+
 </script>
 
 <style scoped>

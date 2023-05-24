@@ -1,9 +1,18 @@
 import {Msg} from "@/model/Msg.js";
 import {Message} from "@/model/IMResponse.js";
-import {getMsgByChatId, getUserChatList, sendUserMsg} from "@/api/home/home.js";
-import {createWebSocket} from "@/utils/socketUtil/socket-plugin.js";
+import {
+    getChannelByGroupId,
+    getChannelMsg,
+    getMsgByChatId,
+    getUserChatList,
+    getUserGroupList, sendGroupMsg,
+    sendUserMsg
+} from "@/api/home/home.js";
+import {closeWs, createWebSocket} from "@/utils/socketUtil/socket-plugin.js";
 import {UserChat} from "@/model/UserChat.js";
 import dayjs from "dayjs";
+import {UserGroup} from "@/model/UserGroup.js";
+import {GroupChannel} from "@/model/GroupChannel.js";
 
 //消息中心
 export default {
@@ -28,6 +37,10 @@ export default {
         friendId: "",
         //当前会话id
         checkSessionId: "",
+        //当前群聊id
+        checkGroupId: "",
+        //当前频道id
+        checkChannelId: "",
 
         linkFlag: false,//websocket是否连接
     },
@@ -41,8 +54,8 @@ export default {
                     context.dispatch('messageCallback', data)
                 }
             )
-            context.state.linkFlag = true;
-            context.dispatch('getUserMsgList')
+            //修改websocket连接状态
+            context.commit("changeLinkFlag", true);
         },
         messageCallback(context, data) {
             if (data.code === 1008) {
@@ -58,7 +71,6 @@ export default {
             if (msg.fromType === 'user') {
                 //这是一条用户消息
                 context.commit("addUserMsgPool", msg);
-                console.log(context.state.checkSessionId+"sduisdhuisdahi"+msg.sessionId)
                 //判断当前会话id是否和当前聊天的id相同，如果相同则将消息添加到聊天消息列表中
                 if (context.state.userChatMsg.length > 0 &&
                     msg.sessionId == context.state.checkSessionId
@@ -70,11 +82,21 @@ export default {
 
             } else {
                 //这是一条群组消息
-                context.state.userMsgPool.push(msg);
+                context.commit("addGroupMsgPool", msg);
+                //判断当前会话id是否和当前聊天的id相同，如果相同则将消息添加到聊天消息列表中
+                if (context.state.groupChatMsg.length > 0 &&
+                    msg.sessionId == context.state.checkChannelId
+                ) {
+                    context.state.groupChatMsg.push(msg);
+                }
+                //重新拉取一下频道消息列表
+                context.dispatch('checkGroup', context.state.checkGroupId)
+
             }
 
 
         },
+        //获取用户消息列表
         async getUserMsgList(context) {
             //获取用户消息列表
             await getUserChatList().then(res => {
@@ -83,7 +105,7 @@ export default {
                     let tmpList = [];
                     res.data.data.forEach(item => {
                         let userChat = new UserChat(item);
-                        userChat.lastMessageTime = dayjs(userChat.lastMessageTime).format("YYYY-MM-DD HH:mm:ss");
+                        userChat.lastMessageTime = userChat.lastMessageTime ? dayjs(userChat.lastMessageTime).format("YYYY-MM-DD HH:mm:ss") : "";
                         tmpList.push(userChat);
                     })
                     //将用户消息列表按时间排序
@@ -105,6 +127,22 @@ export default {
                     console.log("用户消息列表", context.state.userMsgList)
                 }
             })
+        },
+        //获取用户群组列表
+        async getUserGroupList(context) {
+            //获取用户群组列表
+            await getUserGroupList().then(
+                (res) => {
+                    let result = res.data;
+                    let data = result.data;
+                    let tmpList = [];
+                    data.forEach(item => {
+                        let userGroup = new UserGroup(item);
+                        tmpList.push(userGroup);
+                    })
+                    context.commit("updateGroupList", tmpList);
+                }
+            )
         },
         //选择用户聊天
         async checkUserChat(context, chat) {
@@ -146,13 +184,74 @@ export default {
                 }
             })
         },
+        //选择群组聊天
+        async checkGroup(context, groupId) {
+            console.log("检查群组聊天消息", groupId)
+            let data = {
+                groupId: groupId,
+            }
+            //修改选择的群组id
+            context.commit("changeGroupId", groupId);
+            //获取群组所属的频道
+            await getChannelByGroupId(data).then(res => {
+                console.log("获取群组所属的频道", res)
+                if (res && res.data) {
+                    let tmpList = [];
+                    res.data.data.forEach(item => {
+                        let channel = new GroupChannel(item);
+                        channel.lastMsgTime = channel.lastMsgTime ? dayjs(channel.lastMsgTime).format("YYYY-MM-DD HH:mm:ss") : "";
+                        tmpList.push(channel);
+                    })
+                    context.commit("updateChannelList", tmpList);
+                }
+            })
+        },
+        //选择频道聊天
+        async checkChannelChat(context, channelId) {
+            console.log(channelId)
+            let data = {
+                channelId: channelId,
+            }
+            //修改选择的频道id
+            context.commit("changeChannelId", channelId);
+            //获取频道聊天消息
+            await getChannelMsg(data).then(res => {
+                console.log("获取频道聊天消息", res)
+                if (res && res.data) {
+                    let tmpList = [];
+                    res.data.data.forEach(item => {
+                        let imResponse = new Message(item);
+                        let msg = new Msg(imResponse);
+                        //判断消息是否已经存在于消息池中
+                        let tmp = context.state.groupMsgPool.filter(item => {
+                            return item.id === msg.id;
+                        })
+                        if (tmp.length === 0) {
+                            tmpList.push(msg);
+                        }
+                    })
+
+                    console.log("获取频道聊天消息", tmpList)
+                    context.state.groupMsgPool.push(...tmpList)
+                    //过滤池中的消息
+                    tmpList = context.state.groupMsgPool.filter(item => {
+                        return item.sessionId === channelId;
+                    })
+
+                    console.log("过滤后的消息", tmpList)
+                    //将过滤后的消息添加到聊天消息列表中
+                    context.commit("updateGroupChatMsg", tmpList);
+                }
+            })
+        },
         //发送消息
-        sendMessage(context, msg,contentType) {
+        sendMessage(context, msg) {
+
             //组装消息体
             let imResponse = {
                 to: context.state.friendId,
-                contentType: contentType?contentType:'0',
-                content: msg,
+                contentType: msg.contentType ? msg.contentType : '0',
+                content: msg.content,
                 device: 'web',
             }
 
@@ -160,6 +259,23 @@ export default {
             //发送消息
             sendUserMsg(imResponse).then(res => {
                     console.log("发送消息", res)
+                }
+            )
+        },
+        //发送群组消息
+        sendGroupMessage(context, msg) {
+            //组装消息体
+            let imResponse = {
+                to: context.state.checkChannelId,
+                contentType: msg.contentType ? msg.contentType : '0',
+                content: msg.content,
+                device: 'web',
+            }
+
+            console.log("发送群组消息", imResponse)
+            //发送消息
+            sendGroupMsg(imResponse).then(res => {
+                    console.log("发送群组消息", res)
                 }
             )
         },
@@ -174,6 +290,12 @@ export default {
             let userMsgList = [];
             let groupList = [];
             let channelList = [];
+            let linkFlag = false;
+            let friendId = "";
+            let checkSessionId = "";
+            let checkGroupId = "";
+            let checkChannelId = "";
+
             let data = {
                 userMsgPool,
                 groupMsgPool,
@@ -181,10 +303,21 @@ export default {
                 groupChatMsg,
                 userMsgList,
                 groupList,
-                channelList
+                channelList,
+                linkFlag,
+                friendId,
+                checkSessionId,
+                checkGroupId,
+                checkChannelId,
             }
             context.commit("updateAllMsgList", data);
 
+        },
+        //关闭websocket连接
+        closeWebSocket(context) {
+            closeWs();
+            //修改连接状态
+            context.commit("changeLinkFlag", false);
         },
 
 
@@ -202,6 +335,11 @@ export default {
         updateUserChatMsg(state, msg) {
             state.userChatMsg = msg;
         },
+
+        //修改群组聊天消息临时存储
+        updateGroupChatMsg(state, msg) {
+            state.groupChatMsg = msg;
+        },
         //修改好友id
         changeFriendId(state, id) {
             state.friendId = id;
@@ -210,9 +348,26 @@ export default {
         changeSessionId(state, id) {
             state.checkSessionId = id;
         },
+        //修改群组id
+        changeGroupId(state, id) {
+            state.checkGroupId = id;
+        },
+        //修改频道id
+        changeChannelId(state, id) {
+            state.checkChannelId = id;
+        },
+
         //更新用户消息列表
         updateUserMsgList(state, list) {
             state.userMsgList = list;
+        },
+        //更新群组列表
+        updateGroupList(state, list) {
+            state.groupList = list;
+        },
+        //更新频道列表
+        updateChannelList(state, list) {
+            state.channelList = list;
         },
 
         //修改连接状态
@@ -227,6 +382,11 @@ export default {
             state.userMsgList = payload.userMsgList;
             state.groupList = payload.groupList;
             state.channelList = payload.channelList;
+            state.linkFlag = payload.linkFlag;
+            state.friendId = payload.friendId;
+            state.checkSessionId = payload.checkSessionId;
+            state.checkGroupId = payload.checkGroupId;
+            state.checkChannelId = payload.checkChannelId;
         }
 
 

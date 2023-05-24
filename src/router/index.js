@@ -39,6 +39,15 @@ const routes = [
                     needLogin: true
                 }
             },
+            {
+                path: "groupMsg",
+                name: "GroupMsg",
+                component: () => import('@/components/home/groupMsg.vue'),
+                meta: {
+                    title: "群聊列表",
+                    needLogin: true
+                }
+            }
         ]
     },
     {

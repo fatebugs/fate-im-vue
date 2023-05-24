@@ -52,7 +52,7 @@ async function userLogin() {
                 store.dispatch('messageAbout/initAllMsgList')
 
                 router.push({
-                    name:"HomePage"
+                    name:"UserMsg"
                 });
             }else {
                 MessagePlugin.error(result.msg)

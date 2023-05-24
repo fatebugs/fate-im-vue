@@ -1,16 +1,16 @@
 <template>
-  <t-dialog :visible="formVisible" header="发送图片" :width="680" :footer="false">
+  <t-dialog :visible="formVisible" header="发送视频" :width="680" :footer="false">
     <template #body>
       <t-upload
-          v-model="imgFile"
+          v-model="files"
           :action="uploadUrl"
-          theme="image-flow"
-          accept="image/*"
+          theme="file-flow"
+          accept="video/*"
           multiple
           :auto-upload="true"
           :locale="{
                         triggerUploadText: {
-                          image: '请选择图片',
+                          image: '请选择视频',
                         },
                       }"
           @fail="handleFail"
@@ -32,19 +32,18 @@ import {MessagePlugin} from 'tdesign-vue-next';
 import store from "@/store/index.js";
 import {APIUrl, fileService} from "@/api/apiConfig.js";
 
-let formVisible = computed(()=>store.state.sendMsgAbout.formVisible)
+let formVisible = computed(()=>store.state.sendMsgAbout.videoVisible)
 
 //获取父页面传递的data值
 let props = defineProps(['data']);
 const data=toRefs(props).data
 
-
 const onClickCloseBtn = () => {
-  store.commit('sendMsgAbout/setFormVisible', false)
+  store.commit('sendMsgAbout/setVideoVisible', false)
 };
 
 //文件上传
-const imgFile = ref([]);
+const files = ref([]);
 
 
 const uploadUrl = APIUrl+fileService+'/oss/upload'
@@ -69,30 +68,30 @@ const formatResponse = (res) => {
 //发送图片消息
 const sendImgMsg = () => {
   //转换为消息格式
-  console.log(imgFile.value)
+  console.log(files.value)
   //收集所有的url,第一张和最后一张之间用逗号隔开
   let imgUrls = ''
-  for (let i = 0; i < imgFile.value.length; i++) {
+  for (let i = 0; i < files.value.length; i++) {
     if (i === 0) {
-      imgUrls = imgFile.value[i].url
+      imgUrls = files.value[i].url
     } else {
-      imgUrls = imgUrls + ',' + imgFile.value[i].url
+      imgUrls = imgUrls + ';' + files.value[i].url
     }
   }
   console.log(imgUrls)
   let msg={
     content:imgUrls,
-    contentType:'1',
+    contentType:'3',
   }
+
   if (data === 1) {
     store.dispatch('messageAbout/sendMessage', msg)
   }else {
     store.dispatch('messageAbout/sendGroupMessage', msg)
   }
 
-
-  imgFile.value = []
-  store.commit('sendMsgAbout/setFormVisible', false)
+  files.value = []
+  store.commit('sendMsgAbout/setVideoVisible', false)
 
 };
 

@@ -20,7 +20,7 @@
 
           </t-list-item-meta>
           <template #action>
-            <span>{{ dayjs(chat.lastMessageTime).format('HH:mm') }}</span>
+            <span>{{ chat.lastMessageTime?dayjs(chat.lastMessageTime).format('HH:mm'):"" }}</span>
           </template>
         </t-list-item>
       </t-button>

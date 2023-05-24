@@ -1,13 +1,12 @@
 <template>
   <t-aside class="userChatList" style="width:20vw;border-top: 1px solid var(--component-border);">
-    <contact-list v-show="chatList"></contact-list>
-    <span v-show="!chatList">暂时没有消息哦</span>
+    <group-list></group-list>
   </t-aside>
   <t-layout>
     <t-content style="width: 50vw;border-top: 1px solid var(--component-border);">
-      <div v-if="store.state.messageAbout.checkSessionId"
-           style="width: 50vw;height: 70vh;background-color: #eeeeee"
-      >
+      <div v-if="store.state.messageAbout.checkChannelId"
+           style="width: 50vw;height: 70vh;background-color: #eeeeee">
+
         <t-list :split="true" class="msgList" style="max-height: 70vh;"
                 @scroll="scrollHandler">
           <t-list-item v-for="(msg, index) in messageList" :key="index">
@@ -88,11 +87,11 @@
                 <template #content>
                   <t-link v-for="(fileUrl,index) in msg.content.split(';')"
                           :href="fileUrl"
-                          target="_blank"
                           hover="color"
+                          target="_blank"
                           theme="primary" underline>
-                    <jump-icon slot="suffixIcon" />
-                    文件{{index+1}}
+                    <jump-icon slot="suffixIcon"/>
+                    文件{{ index + 1 }}
                   </t-link>
 
                 </template>
@@ -122,7 +121,7 @@
         ></t-back-top>
 
       </div>
-      <div v-if="store.state.messageAbout.checkSessionId" style="">
+      <div v-if="store.state.messageAbout.checkChannelId" style="">
         <t-row justify="center" style="height: 5vh;margin-top: 1vh">
           <t-col :span="2">
             <t-popup content="图片发送" destroy-on-close>
@@ -189,34 +188,43 @@
         </t-comment>
       </div>
     </t-content>
+    <t-aside style="width: 20vw;border-top: 1px solid var(--component-border);">
+      <channel-list v-show="channel"></channel-list>
+      <span v-show="!channel">暂时没有消息哦</span>
+    </t-aside>
   </t-layout>
 
-  <ImageForm :data="1"></ImageForm>
-  <VideoForm :data="1"></VideoForm>
-  <FileForm :data="1"></FileForm>
+  <ImageForm :data="2"></ImageForm>
+  <VideoForm :data="2"></VideoForm>
+  <FileForm :data="2"></FileForm>
 
 </template>
 <script setup>
 import ContactList from "@/components/home/contactList.vue";
 import {MessagePlugin} from 'tdesign-vue-next';
-import { LinkIcon, JumpIcon } from 'tdesign-icons-vue-next';
-
-
-const visible = ref(false);
+import {LinkIcon, JumpIcon} from 'tdesign-icons-vue-next';
+import "vue3-video-play/dist/style.css";
+import vue3VideoPlay from "vue3-video-play";
+import store from "@/store/index.js";
+import ImageForm from "@/components/home/dialogForm/imageForm.vue";
+import VideoForm from "@/components/home/dialogForm/videoForm.vue";
+import FileForm from "@/components/home/dialogForm/fileForm.vue";
+import ChannelList from "@/components/home/channelList.vue";
+import GroupList from "@/components/home/groupList.vue";
 
 let messageList = computed(() => {
-  let userChatMsg = store.state.messageAbout.userChatMsg;
-  userChatMsg.sort((a, b) => {
+  let groupChatMsg = store.state.messageAbout.groupChatMsg;
+  groupChatMsg.sort((a, b) => {
     return b.id - a.id
   })
-  return userChatMsg
+  return groupChatMsg
 })
 let userInfo = computed(() => {
   return store.state.userAbout.tokenInfo.user
 })
 
-let chatList = computed(() => {
-  return useStore().state.messageAbout.userMsgList
+let channel = computed(() => {
+  return useStore().state.messageAbout.channelList
 })
 
 
@@ -236,24 +244,15 @@ const submitReply = () => {
     contentType: '0',
   }
 
-  store.dispatch('messageAbout/sendMessage', msg)
+  store.dispatch('messageAbout/sendGroupMessage', msg)
   replyData.value = ''
 }
 
 onMounted(() => {
   store.dispatch('messageAbout/iniWebSocket')
-  store.dispatch('messageAbout/getUserMsgList')
-  // store.commit('sendMsgAbout/setFormVisible', false)
+  //初始化群组列表
+  store.dispatch('messageAbout/getUserGroupList')
 })
-
-
-import "vue3-video-play/dist/style.css";
-import vue3VideoPlay from "vue3-video-play";
-import store from "@/store/index.js";
-import ImageForm from "@/components/home/dialogForm/imageForm.vue";
-import VideoForm from "@/components/home/dialogForm/videoForm.vue";
-import FileForm from "@/components/home/dialogForm/fileForm.vue";
-
 
 let data = reactive({
   options: {
