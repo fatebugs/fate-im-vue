@@ -47,7 +47,17 @@ const routes = [
                     title: "群聊列表",
                     needLogin: true
                 }
-            }
+            },
+            {
+                path: "userInfo",
+                name: "UserInfo",
+                component: () => import('@/components/home/userInfo.vue'),
+                meta: {
+                    title: "个人信息",
+                    needLogin: true
+                }
+            },
+
         ]
     },
     {

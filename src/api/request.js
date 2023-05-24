@@ -18,7 +18,7 @@ const urlConfig = {
 const service = axios.create({
     // 公共接口
     baseURL: urlConfig.baseUrl,
-    // 超时时间 单位是ms，这里设置了10s的超时时间
+    // 超时时间 单位是ms，这里设置了10s的超时时  间
     timeout: 20 * 1000
 })
 // 2.请求拦截器

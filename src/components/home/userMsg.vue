@@ -116,7 +116,7 @@
         </t-list>
 
         <t-back-top
-            :visible-height="50"
+            :visible-height="0"
             container=".msgList"
             style="position: absolute; right: 22%; bottom: 24%"
         ></t-back-top>

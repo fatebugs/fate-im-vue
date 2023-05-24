@@ -22,6 +22,7 @@ declare module '@vue/runtime-core' {
     IndexHeader: typeof import('./components/index/indexHeader.vue')['default']
     LoginForm: typeof import('./components/login/loginForm.vue')['default']
     MenuRight: typeof import('./components/home/menuRight.vue')['default']
+    Notice: typeof import('./components/index/Notice.vue')['default']
     Register: typeof import('./components/login/register.vue')['default']
     RegisterForm: typeof import('./components/login/registerForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -59,6 +60,7 @@ declare module '@vue/runtime-core' {
     TSpace: typeof import('tdesign-vue-next')['Space']
     TTextarea: typeof import('tdesign-vue-next')['Textarea']
     TUpload: typeof import('tdesign-vue-next')['Upload']
+    UserInfo: typeof import('./components/home/userInfo.vue')['default']
     UserMsg: typeof import('./components/home/userMsg.vue')['default']
     VideoForm: typeof import('./components/home/dialogForm/videoForm.vue')['default']
   }

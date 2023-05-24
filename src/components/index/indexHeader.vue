@@ -25,14 +25,16 @@
             </t-button>
           </t-dropdown>
 
-          <t-badge :count="2" size="small">
+<!--          <t-badge :count="2" size="small">
             <t-button shape="square" variant="text">
               <template #icon>
                 <t-icon name="mail" size="20px"/>
               </template>
             </t-button>
-          </t-badge>
+          </t-badge>-->
 
+          <!-- 全局通知 -->
+          <notice />
         </div>
       </template>
     </t-head-menu>
@@ -44,6 +46,7 @@ import {MessagePlugin} from 'tdesign-vue-next';
 import {logout} from "@/api/user/login.js";
 import store from "@/store/index.js";
 import {TokenInfo} from "@/model/TokenInfo.js";
+import Notice from "@/components/index/Notice.vue";
 
 const options = [
   {content: '修改账号信息', value: 1},

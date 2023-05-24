@@ -41,6 +41,8 @@ const data=toRefs(props).data
 
 const onClickCloseBtn = () => {
   store.commit('sendMsgAbout/setFormVisible', false)
+  //清空数据
+  imgFile.value = []
 };
 
 //文件上传

@@ -40,6 +40,8 @@ const data=toRefs(props).data
 
 const onClickCloseBtn = () => {
   store.commit('sendMsgAbout/setVideoVisible', false)
+  //清空数据
+  files.value = []
 };
 
 //文件上传
