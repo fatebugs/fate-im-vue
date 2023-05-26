@@ -2,12 +2,9 @@
   <div style="max-height: 92vh;">
 
     <t-list :split="true" style="max-height: 92vh;" @scroll="scrollHandler">
-      <t-input label="好友名称：" placeholder="搜索好友信息">
-        <template #suffixIcon>
-            <t-icon name="user" :style="{ cursor: 'pointer' }"/>
-        </template>
-      </t-input>
-      <t-button v-for="(chat,index) in chatList" :key="index" block style="height: 90px;"
+
+      <t-button v-for="(chat,index) in chatList"
+                :key="index" block style="height: 90px;"
                 :theme=" checkChatId== chat.id ? 'primary' : 'default'"
                 @click="checkUserChat(chat)"
 

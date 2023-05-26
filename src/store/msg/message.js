@@ -5,7 +5,8 @@ import {
     getChannelMsg,
     getMsgByChatId,
     getUserChatList,
-    getUserGroupList, sendGroupMsg,
+    getUserGroupList,
+    sendGroupMsg,
     sendUserMsg
 } from "@/api/home/home.js";
 import {closeWs, createWebSocket} from "@/utils/socketUtil/socket-plugin.js";
@@ -13,6 +14,7 @@ import {UserChat} from "@/model/UserChat.js";
 import dayjs from "dayjs";
 import {UserGroup} from "@/model/UserGroup.js";
 import {GroupChannel} from "@/model/GroupChannel.js";
+import {getFriendsByGroups} from "@/api/user/friend.js";
 
 //消息中心
 export default {
@@ -32,6 +34,9 @@ export default {
         userChatMsg: [{}],
         //群组聊天消息临时存储
         groupChatMsg: [{}],
+
+        //好友列表
+        userFriendList: [{}],
 
         //好友id
         friendId: "",
@@ -186,6 +191,10 @@ export default {
         },
         //选择群组聊天
         async checkGroup(context, groupId) {
+            //清除群组消息临时池
+            context.commit("updateGroupChatMsg", []);
+            //清除选择的频道id
+            context.commit("changeChannelId", "");
             console.log("检查群组聊天消息", groupId)
             let data = {
                 groupId: groupId,
@@ -278,6 +287,11 @@ export default {
                     console.log("发送群组消息", res)
                 }
             )
+        },
+        getFriendList (context) {
+            getFriendsByGroups().then(res => {
+                context.commit("updateFriendList", res.data.data)
+            })
         },
 
 
@@ -387,7 +401,11 @@ export default {
             state.checkSessionId = payload.checkSessionId;
             state.checkGroupId = payload.checkGroupId;
             state.checkChannelId = payload.checkChannelId;
-        }
+        },
+        //修改好友列表
+        updateFriendList(state, list) {
+            state.userFriendList = list;
+        },
 
 
     },//设置state中的数据（set）

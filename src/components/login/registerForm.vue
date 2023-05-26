@@ -115,7 +115,7 @@ const userRegister =async () => {
           localStorage.setItem("session_token", result.data.token)
           store.commit('userAbout/setTokenInfo', result.data)
           router.push({
-            name:"HomePage"
+            name:"UserMsg"
           });
         }else {
           MessagePlugin.error(result.msg)

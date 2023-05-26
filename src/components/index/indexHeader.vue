@@ -69,6 +69,10 @@ const clickHandler = async (data) => {
           })
         }
     )
+  }else if (data.value === 1) {
+    router.push({
+      path: "/home/userInfo",
+    })
   }
 };
 

@@ -28,7 +28,9 @@
       </t-menu-item>
     </t-menu-group>
     <t-menu-group title="更多">
-      <t-menu-item value="item3">
+      <t-menu-item value="item3"
+                    to="/home/userInfo"
+      >
         <template #icon>
           <t-icon name="setting"/>
         </template>

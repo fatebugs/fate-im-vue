@@ -31,3 +31,20 @@ export function logout() {
         method: 'get',
     })
 }
+
+//获取用户信息
+export function getLoginUser() {
+    return request({
+        url: userService+'/user/getLoginUser',
+        method: 'get',
+    })
+}
+
+//修改用户信息
+export function updateUserInfo(query) {
+    return request({
+        url: userService+'/user/updateUserInfo',
+        method: 'post',
+        data: query,
+    })
+}

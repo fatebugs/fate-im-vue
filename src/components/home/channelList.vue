@@ -2,6 +2,7 @@
   <div style="max-height: 92vh;">
 
     <t-list :split="true" style="max-height: 92vh;" @scroll="scrollHandler">
+      <t-button @click="store.commit('sendMsgAbout/setCreateChannelVisible',true)">新建频道</t-button>
       <t-button v-for="(chat,index) in channel" :key="index" block style="height: 90px;"
                 :theme=" checkChannelId== chat.channelId ? 'primary' : 'default'"
                 @click="checkChannelChat(chat.channelId)"

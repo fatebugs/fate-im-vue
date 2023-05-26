@@ -17,10 +17,6 @@
           @success="handleSuccess"
           :format-response="formatResponse"
       ></t-upload>
-
-
-
-
       <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
       <t-button theme="primary" @click="sendImgMsg">确定</t-button>
     </template>
@@ -86,7 +82,7 @@ const sendImgMsg = () => {
     content:imgUrls,
     contentType:'1',
   }
-  if (data === 1) {
+  if (data.value === 1) {
     store.dispatch('messageAbout/sendMessage', msg)
   }else {
     store.dispatch('messageAbout/sendGroupMessage', msg)

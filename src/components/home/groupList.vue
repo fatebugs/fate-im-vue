@@ -4,7 +4,7 @@
       <!--          用户加入的群聊-->
       <t-button v-for="(item,index) in groupList"
                 :key="index"
-                :active="item.id === store.state.messageAbout.checkGroupId"
+                :theme=" item.groupId === store.state.messageAbout.checkGroupId ? 'primary' : 'default'"
                 block
                 style="height: 90px;"
                 @click="checkGroup(item.groupId)"

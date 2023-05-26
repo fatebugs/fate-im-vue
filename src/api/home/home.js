@@ -64,3 +64,45 @@ export function sendGroupMsg(query) {
         data: query,
     })
 }
+
+//发起好友消息
+export function launchFriendChat(query) {
+    return request({
+        url: imService+'/userChat/launchFriendChat',
+        method: 'get',
+        params: query,
+    })
+}
+
+//搜索群聊
+export function searchGroup(query) {
+    return request({
+        url: imService+'/userChatGroup/searchGroup',
+        method: 'get',
+        params: query,
+    })
+}
+//加入群聊
+export function joinGroup(query) {
+    return request({
+        url: imService+'/userChatGroup/joinGroup',
+        method: 'get',
+        params: query,
+    })
+}
+//创建群聊
+export function createGroup(query) {
+    return request({
+        url: imService+'/userChatGroup/createGroup',
+        method: 'post',
+        data: query,
+    })
+}
+//创建频道
+export function createChannel(query) {
+    return request({
+        url: imService+'/userChatChannel/createChannel',
+        method: 'post',
+        data: query,
+    })
+}

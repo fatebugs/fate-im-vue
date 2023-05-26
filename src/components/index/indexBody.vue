@@ -43,7 +43,7 @@ function openLoginPage() {
         })
     } else {
         router.push({
-            name: "HomePage"
+            name: "UserMsg"
         })
     }
 

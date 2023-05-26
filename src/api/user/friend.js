@@ -18,3 +18,46 @@ export function handleFriendApply(query) {
         data: query
     })
 }
+
+//获取好友列表
+export function getFriendsByGroups() {
+    return request({
+        url: imService + '/userFriend/getFriendsByGroups',
+        method: 'get',
+    })
+}
+
+//获取好友分组
+export function getFriendGroups() {
+    return request({
+        url: imService + '/userFriend/findFriendGroup',
+        method: 'get',
+    })
+}
+//新建好友分组
+export function createFriendGroup(query) {
+    return request({
+        url: imService + '/userFriend/createFriendGroup',
+        method: 'post',
+        data: query
+    })
+}
+
+//搜索好友
+export function searchFriend(query) {
+    return request({
+        url: imService + '/userFriend/searchFriend',
+        method: 'get',
+        params: query
+    })
+}
+
+//发送好友申请
+export function launchFriendApply(query) {
+    return request({
+        url: imService + '/userFriend/launchFriendApply',
+        method: 'post',
+        data: query
+    })
+}
+

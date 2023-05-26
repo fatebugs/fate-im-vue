@@ -1,26 +1,22 @@
 <template>
-  <t-dialog :visible="formVisible" header="发送文件" :width="680" :footer="false">
+  <t-dialog :footer="false" :visible="formVisible" :width="680" header="发送文件">
     <template #body>
       <t-upload
           v-model="files"
           :action="uploadUrl"
-          theme="file-flow"
-          accept="video/*"
-          multiple
           :auto-upload="true"
+          :format-response="formatResponse"
           :locale="{
                         triggerUploadText: {
                           image: '发送文件',
                         },
                       }"
+          accept="video/*"
+          multiple
+          theme="file-flow"
           @fail="handleFail"
           @success="handleSuccess"
-          :format-response="formatResponse"
       ></t-upload>
-
-
-
-
       <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
       <t-button theme="primary" @click="sendImgMsg">确定</t-button>
     </template>
@@ -32,11 +28,11 @@ import {MessagePlugin} from 'tdesign-vue-next';
 import store from "@/store/index.js";
 import {APIUrl, fileService} from "@/api/apiConfig.js";
 
-let formVisible = computed(()=>store.state.sendMsgAbout.fileVisible)
+let formVisible = computed(() => store.state.sendMsgAbout.fileVisible)
 
 //获取父页面传递的data值
 let props = defineProps(['data']);
-const data=toRefs(props).data
+const data = toRefs(props).data
 
 const onClickCloseBtn = () => {
   store.commit('sendMsgAbout/setFileVisible', false)
@@ -48,7 +44,7 @@ const onClickCloseBtn = () => {
 const files = ref([]);
 
 
-const uploadUrl = APIUrl+fileService+'/oss/upload'
+const uploadUrl = APIUrl + fileService + '/oss/upload'
 const handleFail = ({file}) => {
   MessagePlugin.error(`文件 ${file.name} 上传失败`);
 };
@@ -81,14 +77,14 @@ const sendImgMsg = () => {
     }
   }
   console.log(fileUrls)
-  let msg={
-    content:fileUrls,
-    contentType:'4',
+  let msg = {
+    content: fileUrls,
+    contentType: '4',
   }
 
   if (data === 1) {
     store.dispatch('messageAbout/sendMessage', msg)
-  }else {
+  } else {
     store.dispatch('messageAbout/sendGroupMessage', msg)
   }
 

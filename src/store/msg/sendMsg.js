@@ -5,6 +5,10 @@ export default {
         formVisible:false,
         videoVisible:false,
         fileVisible:false,
+        userFriendVisible:false,
+        userApplyVisible:false,
+        createGroupVisible:false,
+        createChannelVisible:false,
     },
     actions:{
 
@@ -19,6 +23,19 @@ export default {
         setFileVisible(state,fileVisible){
             state.fileVisible = fileVisible;
         },
+        setUserFriendVisible(state,userFriendVisible){
+            state.userFriendVisible = userFriendVisible;
+        },
+        setUserApplyVisible(state,userApplyVisible){
+            state.userApplyVisible = userApplyVisible;
+        },
+        setCreateGroupVisible(state,createGroupVisible){
+            state.createGroupVisible = createGroupVisible;
+        },
+        setCreateChannelVisible(state,createChannelVisible){
+            state.createChannelVisible = createChannelVisible;
+        },
+
     },
     getters:{
 

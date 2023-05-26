@@ -1,6 +1,26 @@
 <template>
   <t-aside class="userChatList" style="width:20vw;border-top: 1px solid var(--component-border);">
-    <group-list></group-list>
+    <t-input v-model="searchGroupName"
+             label="群组名称："
+             placeholder="搜索群组">
+      <template #suffixIcon>
+        <t-icon :style="{ cursor: 'pointer' }"
+                name="search"
+                @click="lunchSearchGroup"
+        />
+      </template>
+    </t-input>
+    <t-button @click="store.commit('sendMsgAbout/setCreateGroupVisible',true)">新建群聊</t-button>
+    <group-list v-show="!searchGroupForm"></group-list>
+    <t-button v-show="searchGroupForm"
+              variant="text"
+              @click="searchGroupForm = false;searchGroupName = '';store.dispatch('messageAbout/getUserGroupList')"
+    >返回</t-button>
+
+
+    <search-group-list v-show="searchGroupForm"
+                        :searchGroupListData="searchGroupListData"
+    ></search-group-list>
   </t-aside>
   <t-layout>
     <t-content style="width: 50vw;border-top: 1px solid var(--component-border);">
@@ -17,14 +37,14 @@
                          :content="msg.content"
                          :datetime="msg.msgTime">
                 <template #actions>
-                  <t-space key="chat" :size="6">
+<!--                  <t-space key="chat" :size="6">
                     <t-icon name="chat"/>
                     <span>回复</span>
                   </t-space>
                   <t-space key="thumbUp" :size="6">
                     <t-icon name="delete"/>
                     <span>删除</span>
-                  </t-space>
+                  </t-space>-->
                 </template>
               </t-comment>
 
@@ -43,14 +63,14 @@
                   />
                 </template>
                 <template #actions>
-                  <t-space key="chat" :size="6">
+<!--                  <t-space key="chat" :size="6">
                     <t-icon name="chat"/>
                     <span>回复</span>
                   </t-space>
                   <t-space key="thumbUp" :size="6">
                     <t-icon name="delete"/>
                     <span>删除</span>
-                  </t-space>
+                  </t-space>-->
                 </template>
               </t-comment>
 
@@ -69,14 +89,14 @@
                   />
                 </template>
                 <template #actions>
-                  <t-space key="chat" :size="6">
+<!--                  <t-space key="chat" :size="6">
                     <t-icon name="chat"/>
                     <span>回复</span>
                   </t-space>
                   <t-space key="thumbUp" :size="6">
                     <t-icon name="delete"/>
                     <span>删除</span>
-                  </t-space>
+                  </t-space>-->
                 </template>
               </t-comment>
 
@@ -96,14 +116,14 @@
 
                 </template>
                 <template #actions>
-                  <t-space key="chat" :size="6">
+<!--                  <t-space key="chat" :size="6">
                     <t-icon name="chat"/>
                     <span>回复</span>
                   </t-space>
                   <t-space key="thumbUp" :size="6">
                     <t-icon name="delete"/>
                     <span>删除</span>
-                  </t-space>
+                  </t-space>-->
                 </template>
               </t-comment>
 
@@ -159,7 +179,7 @@
               </t-button>
             </t-popup>
           </t-col>
-          <t-col :span="2">
+<!--          <t-col :span="2">
             <t-popup content="开启语音聊天" destroy-on-close>
               <t-button shape="square" variant="text">
                 <template #icon>
@@ -176,7 +196,7 @@
                 </template>
               </t-button>
             </t-popup>
-          </t-col>
+          </t-col>-->
         </t-row>
         <t-comment :avatar="userInfo.userInfoAvatar">
           <template #content>
@@ -188,7 +208,7 @@
         </t-comment>
       </div>
     </t-content>
-    <t-aside style="width: 20vw;border-top: 1px solid var(--component-border);">
+    <t-aside style="width: 19vw;border-top: 1px solid var(--component-border);">
       <channel-list v-show="channel"></channel-list>
       <span v-show="!channel">暂时没有消息哦</span>
     </t-aside>
@@ -197,6 +217,9 @@
   <ImageForm :data="2"></ImageForm>
   <VideoForm :data="2"></VideoForm>
   <FileForm :data="2"></FileForm>
+
+  <create-group-form></create-group-form>
+  <create-channel-form></create-channel-form>
 
 </template>
 <script setup>
@@ -211,6 +234,11 @@ import VideoForm from "@/components/home/dialogForm/videoForm.vue";
 import FileForm from "@/components/home/dialogForm/fileForm.vue";
 import ChannelList from "@/components/home/channelList.vue";
 import GroupList from "@/components/home/groupList.vue";
+import SearchFriendList from "@/components/home/searchFriendList.vue";
+import SearchGroupList from "@/components/home/searchGroupList.vue";
+import {searchGroup} from "@/api/home/home.js";
+import CreateGroupForm from "@/components/home/Form/createGroupForm.vue";
+import CreateChannelForm from "@/components/home/Form/createChannelForm.vue";
 
 let messageList = computed(() => {
   let groupChatMsg = store.state.messageAbout.groupChatMsg;
@@ -274,6 +302,29 @@ let data = reactive({
     ], //显示所有按钮,
   },
 });
+
+
+//搜索好友
+const searchGroupForm = ref(false)
+
+let searchGroupName = ref('')
+let searchGroupListData = ref([])
+const lunchSearchGroup = () => {
+  let param = {
+    searchKey: searchGroupName.value
+  }
+  searchGroup(param)
+      .then(res => {
+            let resp = res.data;
+            if (resp.code === 200) {
+              //赋值给好友列表
+              searchGroupListData.value = resp.data
+            }
+          }
+      )
+  searchGroupForm.value = true
+
+}
 </script>
 
 <style scoped>

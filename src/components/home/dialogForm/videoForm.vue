@@ -17,10 +17,6 @@
           @success="handleSuccess"
           :format-response="formatResponse"
       ></t-upload>
-
-
-
-
       <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
       <t-button theme="primary" @click="sendImgMsg">确定</t-button>
     </template>

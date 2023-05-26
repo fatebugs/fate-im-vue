@@ -4,31 +4,30 @@
       <div class="header-msg">
         <div class="header-msg-top">
           <p>好友申请通知</p>
-          <t-button v-if="unreadMsg.length > 0"
+<!--          <t-button v-if="unreadMsg.length > 0"
                     class="clear-btn"
                     theme="primary"
                     variant="text"
                     @click="setRead('all')">
             清空
-          </t-button
-          >
+          </t-button>-->
         </div>
         <t-list v-if="unreadMsg.length > 0" :split="false" class="narrow-scrollbar">
 
           <t-list-item v-for="(item, index) in unreadMsg" :key="index">
-            <t-list-item-meta :image="item.fromUserAvatar"
-                               :title="item.fromUserNickName"
-                               :description="item.applyContent" />
+            <t-list-item-meta :description="item.applyContent"
+                              :image="item.fromUserAvatar"
+                              :title="item.fromUserNickName"/>
             <p class="msg-time">{{ item.createTime }}</p>
-            <template #action v-if="item.applyStats==='0'">
+            <template v-if="item.applyStats==='0'" #action>
               <t-button size="small" variant="outline" @click="handleApply(item.applyUuid,'2')"> 拒绝</t-button>
 
-              <t-button size="small" variant="outline" @click="handleApply(item.applyUuid,'1')"> 同意</t-button>
+              <t-button size="small" variant="outline" @click="agreeApply(item.applyUuid)"> 同意</t-button>
             </template>
-            <template #action v-if="item.applyStats==='1'">
+            <template v-if="item.applyStats==='1'" #action>
               <span>已同意</span>
             </template>
-            <template #action v-if="item.applyStats==='2'">
+            <template v-if="item.applyStats==='2'" #action>
               <span>已拒绝</span>
             </template>
 
@@ -53,18 +52,33 @@
         </div>
       </div>
     </template>
-    <t-badge style="margin-left: 0.5vw" :count="unreadMsg.length" :offset="[4, 4]">
+    <t-badge :count="unreadMsgList.length"
+             :offset="[4, 4]"
+             style="margin-left: 0.5vw">
       <t-button shape="square" theme="default" variant="text">
         <t-icon name="mail"/>
       </t-button>
     </t-badge>
   </t-popup>
+  <user-friend-form :applyUuid="checkApply"
+                    @getApplyList="getApplyList"
+  ></user-friend-form>
 </template>
 
 <script setup>
-import {getFriendApplyList} from "@/api/user/friend.js";
+import {getFriendApplyList, handleFriendApply} from "@/api/user/friend.js";
+import UserFriendForm from "@/components/home/userFriendForm.vue";
+import store from "@/store/index.js";
+import {MessagePlugin} from 'tdesign-vue-next';
+
 
 const unreadMsg = ref([])
+//没有处理过的好友申请
+let unreadMsgList = ref([])
+
+watch(unreadMsg, (newVal, oldVal) => {
+  unreadMsgList.value = newVal.filter(item => item.applyStats === '0')
+})
 
 onMounted(() => {
   if (localStorage.getItem("session_token")) {
@@ -76,29 +90,38 @@ onMounted(() => {
 function getApplyList() {
   getFriendApplyList().then((res) => {
     let resp = res.data;
-    console.log(resp)
+    // console.log(resp)
     if (resp.code === 200) {
       unreadMsg.value = resp.data
-      console.log(unreadMsg.value)
+      // console.log(unreadMsg.value)
     }
   });
 }
+
 //处理好友申请
 function handleApply(applyUuid, applyStats) {
   console.log(applyUuid, applyStats)
-  let data={
-
+  let data = {
+    applyUuid: applyUuid,
+    applyStats: applyStats
   }
 
   //处理好友申请
-  // handleFriendApply().then((res) => {
-  //   let resp = res.data;
-  //   console.log(resp)
-  //   if (resp.code === 200) {
-  //     unreadMsg.value = resp.data
-  //     console.log(unreadMsg.value)
-  //   }
-  // });
+  handleFriendApply(data).then((res) => {
+    let resp = res.data;
+    // console.log(resp)
+    if (resp.code === 200) {
+      MessagePlugin.success(resp.msg)
+      getApplyList()
+    }
+  });
+}
+let checkApply = ref('')
+
+function agreeApply(applyUuid) {
+  checkApply.value = applyUuid
+  store.commit('sendMsgAbout/setUserFriendVisible',true)
+
 }
 
 

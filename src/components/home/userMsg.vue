@@ -1,7 +1,26 @@
 <template>
   <t-aside class="userChatList" style="width:20vw;border-top: 1px solid var(--component-border);">
-    <contact-list v-show="chatList"></contact-list>
+    <t-input v-model="searchFriendName"
+             label="好友名称："
+             placeholder="搜索好友">
+      <template #suffixIcon>
+        <t-icon :style="{ cursor: 'pointer' }"
+                name="search"
+                @click="lunchSearchFriend"
+        />
+      </template>
+    </t-input>
+    <contact-list v-show="chatList&&!searchFriendForm"></contact-list>
     <span v-show="!chatList">暂时没有消息哦</span>
+    <t-button v-show="searchFriendForm"
+              variant="text"
+              @click="searchFriendForm = false;searchFriendName = ''"
+    >返回
+    </t-button>
+    <search-friend-list v-show="searchFriendForm"
+      :searchFriendListData="searchFriendListData"
+    ></search-friend-list>
+
   </t-aside>
   <t-layout>
     <t-content style="width: 50vw;border-top: 1px solid var(--component-border);">
@@ -18,14 +37,14 @@
                          :content="msg.content"
                          :datetime="msg.msgTime">
                 <template #actions>
-                  <t-space key="chat" :size="6">
+<!--                  <t-space key="chat" :size="6">
                     <t-icon name="chat"/>
                     <span>回复</span>
                   </t-space>
                   <t-space key="thumbUp" :size="6">
                     <t-icon name="delete"/>
                     <span>删除</span>
-                  </t-space>
+                  </t-space>-->
                 </template>
               </t-comment>
 
@@ -44,14 +63,14 @@
                   />
                 </template>
                 <template #actions>
-                  <t-space key="chat" :size="6">
+<!--                  <t-space key="chat" :size="6">
                     <t-icon name="chat"/>
                     <span>回复</span>
                   </t-space>
                   <t-space key="thumbUp" :size="6">
                     <t-icon name="delete"/>
                     <span>删除</span>
-                  </t-space>
+                  </t-space>-->
                 </template>
               </t-comment>
 
@@ -70,14 +89,14 @@
                   />
                 </template>
                 <template #actions>
-                  <t-space key="chat" :size="6">
+<!--                  <t-space key="chat" :size="6">
                     <t-icon name="chat"/>
                     <span>回复</span>
                   </t-space>
                   <t-space key="thumbUp" :size="6">
                     <t-icon name="delete"/>
                     <span>删除</span>
-                  </t-space>
+                  </t-space>-->
                 </template>
               </t-comment>
 
@@ -88,23 +107,23 @@
                 <template #content>
                   <t-link v-for="(fileUrl,index) in msg.content.split(';')"
                           :href="fileUrl"
-                          target="_blank"
                           hover="color"
+                          target="_blank"
                           theme="primary" underline>
-                    <jump-icon slot="suffixIcon" />
-                    文件{{index+1}}
+                    <jump-icon slot="suffixIcon"/>
+                    文件{{ index + 1 }}
                   </t-link>
 
                 </template>
                 <template #actions>
-                  <t-space key="chat" :size="6">
+<!--                  <t-space key="chat" :size="6">
                     <t-icon name="chat"/>
                     <span>回复</span>
                   </t-space>
                   <t-space key="thumbUp" :size="6">
                     <t-icon name="delete"/>
                     <span>删除</span>
-                  </t-space>
+                  </t-space>-->
                 </template>
               </t-comment>
 
@@ -160,7 +179,7 @@
               </t-button>
             </t-popup>
           </t-col>
-          <t-col :span="2">
+<!--          <t-col :span="2">
             <t-popup content="开启语音聊天" destroy-on-close>
               <t-button shape="square" variant="text">
                 <template #icon>
@@ -177,7 +196,7 @@
                 </template>
               </t-button>
             </t-popup>
-          </t-col>
+          </t-col>-->
         </t-row>
         <t-comment :avatar="userInfo.userInfoAvatar">
           <template #content>
@@ -189,6 +208,39 @@
         </t-comment>
       </div>
     </t-content>
+    <t-aside style="width: 19vw;border-top: 1px solid var(--component-border);">
+      <t-space direction="vertical">
+        <t-collapse :borderless="true" @change="handlePanelChange">
+          <t-collapse-panel v-for="(group,index) in userFriendList"
+                            :key="index"
+                            :value="group.groupUuid">
+            <template #header>{{ group.groupName }}</template>
+            <template #content>
+              <t-space direction="vertical">
+                <t-list :split="true" @scroll="scrollHandler">
+                  <t-list-item v-for="(friend,index) in group.friends"
+                               :key="index"
+                  >
+                    <t-list-item-meta :image="friend.userInfoAvatar" :title="friend.userInfoNickname">
+                      <template #description>
+                        <p>{{ friend.userInfoSignature }}</p>
+                      </template>
+                    </t-list-item-meta>
+                    <template #action>
+                      <span>
+                        <t-link hover="color" style="margin-left: 16px" theme="primary"
+                                @click="launchChat(friend.userUuid)">聊天</t-link>
+<!--                        <t-link hover="color" style="margin-left: 16px" theme="primary">查看详情</t-link>-->
+                      </span>
+                    </template>
+                  </t-list-item>
+                </t-list>
+              </t-space>
+            </template>
+          </t-collapse-panel>
+        </t-collapse>
+      </t-space>
+    </t-aside>
   </t-layout>
 
   <ImageForm :data="1"></ImageForm>
@@ -199,8 +251,9 @@
 <script setup>
 import ContactList from "@/components/home/contactList.vue";
 import {MessagePlugin} from 'tdesign-vue-next';
-import { LinkIcon, JumpIcon } from 'tdesign-icons-vue-next';
+import {LinkIcon, JumpIcon} from 'tdesign-icons-vue-next';
 
+const searchFriendForm = ref(false)
 
 const visible = ref(false);
 
@@ -209,6 +262,7 @@ let messageList = computed(() => {
   userChatMsg.sort((a, b) => {
     return b.id - a.id
   })
+
   return userChatMsg
 })
 let userInfo = computed(() => {
@@ -244,7 +298,89 @@ onMounted(() => {
   store.dispatch('messageAbout/iniWebSocket')
   store.dispatch('messageAbout/getUserMsgList')
   // store.commit('sendMsgAbout/setFormVisible', false)
+  // getFriendList()
+  store.dispatch('messageAbout/getFriendList')
 })
+
+//获取好友列表
+const userFriendList = computed(() => {
+  return store.state.messageAbout.userFriendList
+})
+
+const getFriendList = () => {
+  getFriendsByGroups().then(res => {
+    userFriendList.value = res.data.data
+    console.log(userFriendList.value)
+  })
+}
+
+
+const handlePanelChange = (val) => {
+  console.log('panel', val);
+};
+
+//发起聊天
+const launchChat = async (userUuid) => {
+  let param = {
+    friendId: userUuid
+  }
+  await launchFriendChat(param).then(res => {
+    let resp = res.data;
+    if (resp.code === 200) {
+      //修改会话id
+      store.commit('messageAbout/changeSessionId', resp.data.id)
+
+      //重新获取会话列表
+      store.dispatch('messageAbout/checkUserChat', resp.data)
+    }
+  })
+}
+
+const backTopFlag = ref(false)//用来判断样式
+const backTop = () => {
+  let top = document.documentElement.scrollTop//获取点击时页面的滚动条纵坐标位置
+  const timeTop = setInterval(() => {
+    document.documentElement.scrollTop = top -= 50//一次减50往上滑动
+    if (top <= 0) {
+      clearInterval(timeTop)
+    }
+  }, 5)//定时调用函数使其更顺滑
+}
+const handleScroll = () => {
+  if (document.documentElement.scrollTop > 20) {
+    backTopFlag.value = true
+  } else {
+    backTopFlag.value = false
+  }
+  //往下滑超过20则显示 否则则不显示按钮
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})//监听滚动事件
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})//离开页面时移除监听事件
+
+//搜索好友
+let searchFriendName = ref('')
+let searchFriendListData = ref([])
+const lunchSearchFriend = () => {
+  let param = {
+    searchKey: searchFriendName.value
+  }
+  searchFriend(param)
+      .then(res => {
+            let resp = res.data;
+            if (resp.code === 200) {
+              //赋值给好友列表
+              searchFriendListData.value = resp.data
+            }
+          }
+      )
+  searchFriendForm.value = true
+
+}
 
 
 import "vue3-video-play/dist/style.css";
@@ -253,13 +389,17 @@ import store from "@/store/index.js";
 import ImageForm from "@/components/home/dialogForm/imageForm.vue";
 import VideoForm from "@/components/home/dialogForm/videoForm.vue";
 import FileForm from "@/components/home/dialogForm/fileForm.vue";
+import ChannelList from "@/components/home/channelList.vue";
+import dayjs from "dayjs";
+import {getFriendsByGroups, searchFriend} from "@/api/user/friend.js";
+import {launchFriendChat} from "@/api/home/home.js";
+import SearchFriendList from "@/components/home/searchFriendList.vue";
 
 
 let data = reactive({
   options: {
     color: "#409eff", //主题色
     muted: false, //静音
-    webFullScreen: false,
     speedRate: ["0.75", "1.0", "1.25", "1.5", "2.0"], //播放倍速
     volume: 0.3, //默认音量大小
     control: true, //是否显示控制
@@ -278,5 +418,6 @@ let data = reactive({
 </script>
 
 <style scoped>
+
 
 </style>
