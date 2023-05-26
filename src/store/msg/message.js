@@ -63,6 +63,7 @@ export default {
             context.commit("changeLinkFlag", true);
         },
         messageCallback(context, data) {
+            console.log("消息中心收到消息", data)
             if (data.code === 1008) {
                 // context.state.linkFlag = false;
                 // router.push({name: "Login"});
@@ -95,7 +96,7 @@ export default {
                     context.state.groupChatMsg.push(msg);
                 }
                 //重新拉取一下频道消息列表
-                context.dispatch('checkGroup', context.state.checkGroupId)
+                context.dispatch('getChannelList', context.state.checkGroupId)
 
             }
 
@@ -215,6 +216,29 @@ export default {
                 }
             })
         },
+        //重新拉取频道列表
+        async getChannelList(context,groupId) {
+            let data = {
+                groupId: groupId,
+            }
+            //修改选择的群组id
+            context.commit("changeGroupId", groupId);
+            //获取群组所属的频道
+            await getChannelByGroupId(data).then(res => {
+                console.log("获取群组所属的频道", res)
+                if (res && res.data) {
+                    let tmpList = [];
+                    res.data.data.forEach(item => {
+                        let channel = new GroupChannel(item);
+                        channel.lastMsgTime = channel.lastMsgTime ? dayjs(channel.lastMsgTime).format("YYYY-MM-DD HH:mm:ss") : "";
+                        tmpList.push(channel);
+                    })
+                    context.commit("updateChannelList", tmpList);
+                }
+            })
+        },
+
+
         //选择频道聊天
         async checkChannelChat(context, channelId) {
             console.log(channelId)

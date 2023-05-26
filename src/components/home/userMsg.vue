@@ -223,7 +223,7 @@
                   >
                     <t-list-item-meta :image="friend.userInfoAvatar" :title="friend.userInfoNickname">
                       <template #description>
-                        <p>{{ friend.userInfoSignature }}</p>
+                        <p>【签名】{{ friend.userInfoSignature }}</p>
                       </template>
                     </t-list-item-meta>
                     <template #action>
